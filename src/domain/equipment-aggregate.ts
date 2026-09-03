@@ -24,9 +24,12 @@ export interface OutboxRecord {
 }
 
 export class EquipmentAggregate {
+  private _props: EquipmentProps;
   private _outbox: OutboxRecord[] = [];
 
-  constructor(private props: EquipmentProps) {}
+  constructor(props: EquipmentProps) {
+    this._props = { ...props };
+  }
 
   static create(props: Omit<EquipmentProps, 'status'>): EquipmentAggregate {
     const aggregate = new EquipmentAggregate({
@@ -45,39 +48,39 @@ export class EquipmentAggregate {
   }
 
   get props(): Readonly<EquipmentProps> {
-    return Object.freeze({ ...this.props });
+    return Object.freeze({ ...this._props });
   }
 
   get outboxEvents(): readonly OutboxRecord[] {
-    return this.props && this._outbox;
+    return this._outbox;
   }
 
   activate(): void {
-    if (this.props.status === 'DECOMMISSIONED') {
+    if (this._props.status === 'DECOMMISSIONED') {
       throw new Error('Cannot activate decommissioned equipment');
     }
-    this.props.status = 'ACTIVE';
+    this._props.status = 'ACTIVE';
     this.recordOutboxEvent('eps.equipment.activated', {
-      equipmentId: this.props.id,
+      equipmentId: this._props.id,
       status: 'ACTIVE'
     });
   }
 
   sendToMaintenance(reason: string): void {
-    if (this.props.status !== 'ACTIVE') {
+    if (this._props.status !== 'ACTIVE') {
       throw new Error('Equipment must be ACTIVE to enter MAINTENANCE');
     }
-    this.props.status = 'MAINTENANCE';
+    this._props.status = 'MAINTENANCE';
     this.recordOutboxEvent('eps.equipment.maintenance_started', {
-      equipmentId: this.props.id,
+      equipmentId: this._props.id,
       reason
     });
   }
 
   decommission(reason: string): void {
-    this.props.status = 'DECOMMISSIONED';
+    this._props.status = 'DECOMMISSIONED';
     this.recordOutboxEvent('eps.equipment.decommissioned', {
-      equipmentId: this.props.id,
+      equipmentId: this._props.id,
       reason
     });
   }
@@ -90,7 +93,7 @@ export class EquipmentAggregate {
     this._outbox.push({
       id: crypto.randomUUID(),
       aggregateType: 'Equipment',
-      aggregateId: this.props.id,
+      aggregateId: this._props.id,
       eventType,
       payload,
       createdAt: new Date().toISOString(),
