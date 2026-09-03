@@ -1,0 +1,12 @@
+﻿{
+  "$schema": "https://ems-platform.local/schemas/module-manifest.v1.json",
+  "id": "module-eps",
+  "name": "Electronic Passport System",
+  "version": "1.0.0",
+  "database": { "schema": "eps" },
+  "permissions": ["eps:equipment:read", "eps:equipment:write", "eps:equipment:decommission"],
+  "events": {
+    "publishes": ["eps.equipment.created", "eps.equipment.updated", "eps.equipment.decommissioned"],
+    "subscribes": []
+  }
+}
