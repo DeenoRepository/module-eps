@@ -7,7 +7,8 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "rootDir": "./src"
   },
   "include": [
     "src/**/*"
@@ -15,6 +16,7 @@
   "exclude": [
     "node_modules",
     "dist",
+    "vitest.config.ts",
     "**/*.test.ts"
   ]
 }
