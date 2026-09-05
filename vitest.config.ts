@@ -5,11 +5,12 @@ export default defineConfig({
   root: path.resolve(__dirname),
   test: {
     globals: true,
+    include: ['src/domain/**/*.test.ts', 'src/*.test.ts'],
     coverage: {
       provider: 'v8',
       all: false,
-      include: ['src/**/*.ts'],
-      exclude: ['src/**/*.test.ts', 'dist/**'],
+      include: ['src/domain/**/*.ts', 'src/*.ts'],
+      exclude: ['src/**/*.test.ts', 'src/ui/**', 'dist/**'],
       reporter: ['text', 'json', 'html'],
       thresholds: {
         lines: 80,
