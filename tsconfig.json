@@ -17,6 +17,8 @@
     "node_modules",
     "dist",
     "vitest.config.ts",
-    "**/*.test.ts"
+    "src/ui/**/*",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }
